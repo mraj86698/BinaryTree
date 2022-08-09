@@ -1,5 +1,8 @@
 package Tree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class BinaryTree {
 	 private Node root;
 
@@ -32,45 +35,124 @@ public class BinaryTree {
 	        }
 	        return node;
 	    }
-	    /* Functions to insert data */
-	    public void delete(int data)
+//	    /* Functions to insert data */
+//	    public void delete(int data)
+//	    {
+//	        root = delete(root, data);
+//	    }
+//	    /* Function to insert data recursively */
+//	    private Node delete(Node node, int data)
+//	    {
+//	    	// Return if the tree is empty
+//	        if (node == null)
+//	        	return node;
+//	        // Find the node to be deleted
+//	        if (data < node.data)
+//	          root.left = delete(node.left, data);
+//	        else if (data > node.data)
+//	          root.right = delete(node.right, data);
+//	        else {
+//	          // If the node is with only one child or no child
+//	          if (node.left == null)
+//	            return node.right;
+//	          else if (node.right == null)
+//	            return node.left;
+//	          // If the node has two children
+//	          // Place the inorder successor in position of the node to be deleted
+//	          node.data = minValue(node.right);
+//
+//	          // Delete the inorder successor
+//	          node.right = delete(node.right, root.data);
+//	        }
+//	        return node;
+//	    }
+//	    // Find the inorder successor
+//	    int minValue(Node node) {
+//	      int minv = node.data;
+//	      while (node.left != null) {
+//	        minv = node.left.data;
+//	        node = node.left;
+//	      }
+//	      return minv;
+//	    }
+	    static void deleteDeepest(Node root, Node delNode)
 	    {
-	        root = delete(root, data);
-	    }
-	    /* Function to insert data recursively */
-	    private Node delete(Node node, int data)
-	    {
-	    	// Return if the tree is empty
-	        if (node == null)
-	        	return node;
-	        // Find the node to be deleted
-	        if (data < node.data)
-	          root.left = delete(node.left, data);
-	        else if (data > node.data)
-	          root.right = delete(node.right, data);
-	        else {
-	          // If the node is with only one child or no child
-	          if (node.left == null)
-	            return node.right;
-	          else if (node.right == null)
-	            return node.left;
-	          // If the node has two children
-	          // Place the inorder successor in position of the node to be deleted
-	          node.data = minValue(node.right);
+	        Queue<Node> q = new LinkedList<Node>();
+	        q.add(root);
+	        Node temp = null;
+	        // Do level order traversal until last node
+	        while (!q.isEmpty())
+	        {
+	            temp = q.peek();
+	            q.remove();
 
-	          // Delete the inorder successor
-	          node.right = delete(node.right, root.data);
+	            if (temp == delNode)
+	            {
+	                temp = null;
+	                return;
+	            }
+	            if (temp.right!=null)
+	            {
+	                if (temp.right == delNode)
+	                {
+	                    temp.right = null;
+	                    return;
+	            }
+	            else
+	                q.add(temp.right);
 	        }
-	        return node;
+	        if (temp.left != null)
+	        {
+	            if (temp.left == delNode)
+	            {
+	                temp.left = null;
+	                return;
+	            }
+	            else
+	                q.add(temp.left);
+	        }
 	    }
-	    // Find the inorder successor
-	    int minValue(Node node) {
-	      int minv = node.data;
-	      while (node.left != null) {
-	        minv = node.left.data;
-	        node = node.left;
-	      }
-	      return minv;
+	    }
+	    // Function to delete given element
+	    // in binary tree
+	    static void delete(Node root, int data)
+	    {
+	        if (root == null)
+	            return;
+
+	        if (root.left == null &&
+	        root.right == null)
+	        {
+	            if (root.data == data)
+	            {
+	                root=null;
+	                return;
+	            }
+	            else
+	                return;
+	        }
+	        Queue<Node> q = new LinkedList<Node>();
+	        q.add(root);
+	        Node temp = null, keyNode = null;
+	        // Do level order traversal until
+	        // we find key and last node.
+	        while (!q.isEmpty())
+	        {
+	            temp = q.peek();
+	            q.remove();
+	            if (temp.data == data)
+	                keyNode = temp;
+	            if (temp.left != null)
+	                q.add(temp.left);
+	            if (temp.right != null)
+	                q.add(temp.right);
+	        }
+	        if (keyNode != null)
+	        {
+	            int x = temp.data;
+	            deleteDeepest(root, temp);
+	            keyNode.data = x;
+	        }
 	    }
 
 	    /* Function to count number of nodes */

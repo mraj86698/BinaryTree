@@ -34,7 +34,8 @@ public class BinaryTreeMain
 
            case 2:
         	   System.out.println("Enter integer element to Delete");
-               tree.delete( scan.nextInt() );
+               Node node = null;
+			tree.delete(node,9 );
                break;
            case 3 :
                System.out.println("Enter integer element to search");
